@@ -3,7 +3,7 @@
  * All fetch calls go through here.
  */
 
-const API_BASE = '/api';
+const API_BASE = 'https://test-website-production-1b48.up.railway.app/api';
 
 // ── Token management ────────────────────────────────────────────────────────
 const Auth = {
