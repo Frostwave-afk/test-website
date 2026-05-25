@@ -12,7 +12,82 @@ window.addEventListener('DOMContentLoaded', async () => {
   setUserInitials();
   loadAdminProfile();
   loadOverview();
+  setupPasswordChangeForm();
 });
+
+// ── Setup password change form ───────────────────────────────────────────────
+function setupPasswordChangeForm() {
+  const form = document.getElementById('changePasswordForm');
+  if (!form) return;
+  form.addEventListener('submit', handlePasswordChange);
+}
+
+async function handlePasswordChange(e) {
+  e.preventDefault();
+  const currentPassword = document.getElementById('currentPassword').value.trim();
+  const newPassword = document.getElementById('newPassword').value.trim();
+  const confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
+
+  let valid = true;
+  ['currentPassword', 'newPassword', 'confirmNewPassword'].forEach(id => {
+    const errEl = document.getElementById(`${id}Error`);
+    if (errEl) errEl.classList.remove('show');
+  });
+
+  if (!currentPassword) {
+    showFieldError('currentPasswordError', 'Current password is required.');
+    valid = false;
+  }
+  if (!newPassword || newPassword.length < 6) {
+    showFieldError('newPasswordError', 'New password must be at least 6 characters.');
+    valid = false;
+  }
+  if (!confirmNewPassword) {
+    showFieldError('confirmNewPasswordError', 'Please confirm your new password.');
+    valid = false;
+  } else if (newPassword !== confirmNewPassword) {
+    showFieldError('confirmNewPasswordError', 'Passwords do not match.');
+    valid = false;
+  }
+  if (newPassword === currentPassword) {
+    showFieldError('newPasswordError', 'New password must be different from current password.');
+    valid = false;
+  }
+  if (!valid) return;
+
+  const btn = document.getElementById('changePasswordBtn');
+  btn.classList.add('btn-loading');
+  btn.disabled = true;
+
+  try {
+    await apiFetch('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ currentPassword, newPassword })
+    });
+    showToast('Password changed successfully!', 'success');
+    document.getElementById('changePasswordForm').reset();
+    ['currentPassword', 'newPassword', 'confirmNewPassword'].forEach(id => {
+      const errEl = document.getElementById(`${id}Error`);
+      if (errEl) errEl.classList.remove('show');
+    });
+  } catch (err) {
+    showToast('Failed to change password: ' + err.message, 'error');
+  } finally {
+    btn.classList.remove('btn-loading');
+    btn.disabled = false;
+  }
+}
+
+function showFieldError(fieldId, msg) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  const span = el.querySelector('span');
+  if (span) span.textContent = msg;
+  el.classList.add('show');
+  const inputId = fieldId.replace('Error', '');
+  const input = document.getElementById(inputId);
+  if (input) input.classList.add('error');
+}
 
 // ── Section switching ─────────────────────────────────────────────────────────
 function showSection(name) {

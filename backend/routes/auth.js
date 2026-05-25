@@ -143,6 +143,61 @@ router.get('/me', async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// POST /api/auth/change-password — Admin change password
+// ─────────────────────────────────────────────────────────────────────────────
+router.post('/change-password', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) return res.status(401).json({ error: 'Not authenticated.' });
+    
+    const token = authHeader.split(' ')[1];
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ error: 'Invalid or expired token.' });
+    }
+
+    // Only admins can change password
+    if (decoded.role !== 'admin') 
+      return res.status(403).json({ error: 'Only admins can use this endpoint.' });
+
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword)
+      return res.status(400).json({ error: 'Current and new passwords are required.' });
+
+    if (newPassword.length < 6)
+      return res.status(400).json({ error: 'New password must be at least 6 characters.' });
+
+    if (currentPassword === newPassword)
+      return res.status(400).json({ error: 'New password must be different from current password.' });
+
+    // Get admin from database
+    const [rows] = await pool.query('SELECT * FROM admin_data WHERE id = ?', [decoded.id]);
+    if (rows.length === 0)
+      return res.status(404).json({ error: 'Admin not found.' });
+
+    const admin = rows[0];
+
+    // Verify current password
+    const valid = await bcrypt.compare(currentPassword, admin.password_hash);
+    if (!valid)
+      return res.status(401).json({ error: 'Current password is incorrect.' });
+
+    // Hash new password
+    const newHash = await bcrypt.hash(newPassword, 12);
+
+    // Update password
+    await pool.query('UPDATE admin_data SET password_hash = ? WHERE id = ?', [newHash, decoded.id]);
+
+    res.json({ message: 'Password changed successfully.' });
+  } catch (err) {
+    console.error('Change password error:', err);
+    res.status(500).json({ error: 'Failed to change password.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // POST /api/auth/google — Google OAuth (Stub — configure later)
 // ─────────────────────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════════
