@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — College Rating System</title>
+  <meta name="description" content="Your dashboard to view and fill subject rating forms for your college.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .hero-section {
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 40px;
+    }
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .hero-greeting {
+      font-family: var(--font-heading);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .hero-greeting span {
+      background: var(--gradient-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub { color: var(--text-secondary); font-size: 0.95rem; }
+    .hero-actions { display: flex; gap: 12px; align-items: center; }
+
+    /* Stats strip */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    /* Forms grid */
+    .forms-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .forms-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gradient-main);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .form-card:hover {
+      border-color: rgba(124,58,237,0.3);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-glow);
+      background: var(--bg-card-hover);
+    }
+    .form-card:hover::before { opacity: 1; }
+    .form-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .form-card-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      background: var(--gradient-card);
+      border: 1px solid rgba(124,58,237,0.2);
+      flex-shrink: 0;
+    }
+    .form-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .form-card-desc {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .form-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .form-card-footer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .form-deadline {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    /* Completed overlay */
+    .form-completed-ribbon {
+      position: absolute;
+      top: 14px; right: -24px;
+      background: var(--success);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 32px;
+      transform: rotate(35deg);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    /* Welcome banner */
+    .welcome-banner {
+      background: var(--gradient-card);
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      animation: fadeUp 0.5s ease;
+    }
+    .welcome-banner-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+    .welcome-banner h3 {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .welcome-banner p { color: var(--text-secondary); font-size: 0.875rem; }
+    @media (max-width: 768px) {
+      .stats-strip { grid-template-columns: repeat(2, 1fr); }
+      .welcome-banner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animated"></div>
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="mainNavbar">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon">🎓</div>
+      College Ratings
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="help.html">Help</a></li>
+    </ul>
+    <div class="navbar-user">
+      <div class="user-avatar" id="userAvatar" onclick="toggleAvatarMenu()">
+        <span id="userInitials">?</span>
+        <div class="user-avatar-menu" id="avatarMenu">
+          <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+          <div class="menu-divider"></div>
+          <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="container">
+      <!-- Hero -->
+      <div class="hero-section">
+        <div class="hero-inner">
+          <div>
+            <div class="hero-greeting">Hello, <span id="greetingName">Student</span>! 👋</div>
+            <div class="hero-sub" id="greetingSub">Welcome to the College Subject Rating System</div>
+          </div>
+          <div class="hero-actions">
+            <a href="help.html" class="btn btn-ghost btn-sm"><i class="fas fa-question-circle"></i> Help</a>
+            <button class="btn btn-primary" onclick="window.location.href='form.html'" id="mainFormBtn">
+              <i class="fas fa-star"></i> Rate Subjects
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="stats-strip animate-stagger" id="statsStrip">
+        <div class="stat-card">
+          <div class="stat-icon purple"><i class="fas fa-clipboard-list"></i></div>
+          <div class="stat-info">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Forms Available</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan" id="formStatusStat">
+            <i class="fas fa-hourglass-half"></i>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value" id="formStatusValue">Pending</div>
+            <div class="stat-label">Form Status</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pink"><i class="fas fa-calendar-alt"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="memberSince">—</div>
+            <div class="stat-label">Member Since</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Welcome banner (shown if form not submitted) -->
+      <div class="welcome-banner" id="welcomeBanner" style="display:none;">
+        <div class="welcome-banner-icon">📝</div>
+        <div>
+          <h3>You haven't filled your rating form yet!</h3>
+          <p>Take 2 minutes to rate your 10 subjects and help improve education quality at your college.</p>
+        </div>
+        <button class="btn btn-primary" onclick="window.location.href='form.html'" style="flex-shrink:0;">
+          Fill Now <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Available Forms -->
+      <div class="forms-header">
+        <div class="section-title" style="margin-bottom:0;">Available Forms</div>
+        <div style="color:var(--text-muted);font-size:0.85rem;">Academic Year 2024-25</div>
+      </div>
+
+      <div class="forms-grid animate-stagger" id="formsGrid">
+        <!-- Form cards injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

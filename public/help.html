@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help & Support — College Rating System</title>
+  <meta name="description" content="Get help with the College Subject Rating System. FAQ, guides, and support.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .help-hero {
+      text-align: center;
+      padding: 48px 0 40px;
+    }
+    .help-search {
+      max-width: 500px;
+      margin: 24px auto 0;
+    }
+    .help-search input {
+      width: 100%;
+      padding: 14px 20px 14px 50px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-full);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .help-search input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+    }
+    .help-search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+    .help-search { position: relative; }
+
+    /* Quick links */
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 36px 0;
+    }
+    .quick-link-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .quick-link-card:hover {
+      border-color: rgba(124,58,237,0.35);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glow);
+    }
+    .quick-link-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .quick-link-icon.purple { background: rgba(124,58,237,0.15); }
+    .quick-link-icon.cyan   { background: rgba(6,182,212,0.15); }
+    .quick-link-icon.pink   { background: rgba(236,72,153,0.15); }
+    .quick-link-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+    .quick-link-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* FAQ */
+    .faq-item {
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 10px;
+      transition: var(--transition);
+    }
+    .faq-item:hover { border-color: rgba(124,58,237,0.25); }
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      background: var(--bg-card);
+      border: none;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-body);
+      transition: var(--transition);
+      gap: 16px;
+    }
+    .faq-question:hover { background: var(--bg-card-hover); }
+    .faq-question .faq-icon {
+      color: var(--primary-light);
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255,255,255,0.02);
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer-inner {
+      padding: 16px 20px 20px;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.75;
+    }
+    .faq-answer-inner code {
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.85em;
+      color: var(--primary-light);
+    }
+
+    /* Steps guide */
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .guide-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .guide-step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--gradient-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: white;
+      flex-shrink: 0;
+    }
+    .guide-step-content h4 {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .guide-step-content p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Contact card */
+    .contact-card {
+      background: var(--gradient-card);
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      text-align: center;
+    }
+    .contact-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .contact-card p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .contact-methods {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .contact-method {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    .contact-method:hover {
+      border-color: var(--primary);
+      color: var(--primary-light);
+    }
+
+    /* Help layout */
+    .help-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 28px;
+      margin-top: 36px;
+    }
+    @media (max-width: 900px) {
+      .quick-links { grid-template-columns: 1fr 1fr; }
+      .help-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .quick-links { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animated"></div>
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <div class="brand-icon">🎓</div>
+      College Ratings
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="help.html" class="active">Help</a></li>
+    </ul>
+    <div class="navbar-user">
+      <div class="user-avatar" id="userAvatar" onclick="toggleAvatarMenu()">
+        <span id="userInitials">?</span>
+        <div class="user-avatar-menu" id="avatarMenu">
+          <a href="index.html"><i class="fas fa-home"></i> Home</a>
+          <div class="menu-divider"></div>
+          <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="container">
+      <!-- Hero -->
+      <div class="help-hero">
+        <h1 class="page-title">How can we help? 🤝</h1>
+        <p class="page-subtitle">Find answers to common questions or contact support.</p>
+        <div class="help-search">
+          <i class="fas fa-search help-search-icon"></i>
+          <input type="text" id="faqSearch" placeholder="Search for help..." oninput="filterFAQ(this.value)">
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <div class="quick-links animate-stagger">
+        <a class="quick-link-card" href="#guide-section">
+          <div class="quick-link-icon purple"><i class="fas fa-book-open"></i></div>
+          <div class="quick-link-label">Getting Started Guide</div>
+          <div class="quick-link-sub">Step-by-step instructions</div>
+        </a>
+        <a class="quick-link-card" href="#faq-section">
+          <div class="quick-link-icon cyan"><i class="fas fa-question-circle"></i></div>
+          <div class="quick-link-label">Frequently Asked Questions</div>
+          <div class="quick-link-sub">Common questions answered</div>
+        </a>
+        <a class="quick-link-card" href="#contact-section">
+          <div class="quick-link-icon pink"><i class="fas fa-envelope"></i></div>
+          <div class="quick-link-label">Contact Support</div>
+          <div class="quick-link-sub">We're here to help</div>
+        </a>
+      </div>
+
+      <!-- Help layout -->
+      <div class="help-layout">
+        <!-- Main content -->
+        <div>
+          <!-- Getting Started Guide -->
+          <div id="guide-section" style="margin-bottom:48px;">
+            <div class="section-title">Getting Started Guide</div>
+            <div class="guide-steps animate-stagger">
+              <div class="guide-step">
+                <div class="guide-step-num">1</div>
+                <div class="guide-step-content">
+                  <h4>Create your account or sign in</h4>
+                  <p>Visit the login page and create a student account using your college email and password. If you already have an account, simply sign in.</p>
+                </div>
+              </div>
+              <div class="guide-step">
+                <div class="guide-step-num">2</div>
+                <div class="guide-step-content">
+                  <h4>Fill in your personal information</h4>
+                  <p>On the form page, enter your name, phone number, gender, and languages spoken. All fields marked with <span style="color:var(--accent)">*</span> are required.</p>
+                </div>
+              </div>
+              <div class="guide-step">
+                <div class="guide-step-num">3</div>
+                <div class="guide-step-content">
+                  <h4>Rate your 10 subjects</h4>
+                  <p>Click the number (1–10) that best represents your rating for each subject. 1 = Poor, 10 = Excellent. All subjects must be rated.</p>
+                </div>
+              </div>
+              <div class="guide-step">
+                <div class="guide-step-num">4</div>
+                <div class="guide-step-content">
+                  <h4>Review and submit</h4>
+                  <p>Check all your details on the review screen. Click "Submit Form" when you're ready. You can always edit your responses later from the Home page.</p>
+                </div>
+              </div>
+              <div class="guide-step">
+                <div class="guide-step-num">5</div>
+                <div class="guide-step-content">
+                  <h4>Edit your submission</h4>
+                  <p>On the Home page, click the "Edit Form" button on the form card to update your ratings or personal information at any time before the deadline.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ -->
+          <div id="faq-section">
+            <div class="section-title">Frequently Asked Questions</div>
+            <div id="faqList">
+              <div class="faq-item" data-question="how do i reset my password">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  How do I reset my password?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    Currently, password reset is handled by your college administrator. Please contact the admin via the Support section below to request a password reset.
+                  </div>
+                </div>
+              </div>
+
+              <div class="faq-item" data-question="can i change my rating after submitting">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  Can I change my rating after submitting?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    Yes! You can edit your form any time before the submission deadline. Simply go to the <strong>Home</strong> page and click the <strong>"Edit Form"</strong> button. Your previous responses will be pre-filled.
+                  </div>
+                </div>
+              </div>
+
+              <div class="faq-item" data-question="is my rating anonymous confidential">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  Is my rating anonymous/confidential?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    Your individual responses are stored securely and only accessible to administrators. Analytics shown to admins are aggregated, but individual form data can be viewed by admins for management purposes.
+                  </div>
+                </div>
+              </div>
+
+              <div class="faq-item" data-question="what do the ratings mean scale">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  What does each rating number mean?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    <strong>1–3:</strong> Poor — The subject needs significant improvement.<br>
+                    <strong>4–6:</strong> Average — Acceptable but there is room for improvement.<br>
+                    <strong>7–8:</strong> Good — You are satisfied with how the subject is taught.<br>
+                    <strong>9–10:</strong> Excellent — Outstanding teaching and content quality.
+                  </div>
+                </div>
+              </div>
+
+              <div class="faq-item" data-question="all subjects required fill">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  Do I need to rate all 10 subjects?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    Yes, all 10 subjects must be rated before you can submit the form. If a subject is not applicable to you, please give it a rating of 5 (average) or contact your administrator.
+                  </div>
+                </div>
+              </div>
+
+              <div class="faq-item" data-question="google sign in login not working">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  Why isn't Google Sign-In available?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    Google Sign-In is currently being set up. In the meantime, please use your email and password to log in. You can register a new account on the login page if you don't have one yet.
+                  </div>
+                </div>
+              </div>
+
+              <div class="faq-item" data-question="phone number format validation">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  What format should my phone number be in?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    Enter exactly <code>10 digits</code> without spaces, dashes, or country codes. For example: <code>9876543210</code>. Do not include <code>+91</code> or <code>0</code> prefix.
+                  </div>
+                </div>
+              </div>
+
+              <div class="faq-item" data-question="session expired login again token">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                  Why was I logged out automatically?
+                  <i class="fas fa-chevron-down faq-icon"></i>
+                </button>
+                <div class="faq-answer">
+                  <div class="faq-answer-inner">
+                    For security, login sessions expire after 7 days of inactivity. Simply sign in again with your credentials. Your form data is saved in the database and will not be lost.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+          <!-- Contact card -->
+          <div id="contact-section" class="contact-card" style="margin-bottom:20px;">
+            <h3>Need more help?</h3>
+            <p>Contact our support team and we'll get back to you shortly.</p>
+            <div class="contact-methods">
+              <a href="mailto:support@college.edu" class="contact-method">
+                <i class="fas fa-envelope"></i> Email Support
+              </a>
+              <a href="tel:+910000000000" class="contact-method">
+                <i class="fas fa-phone"></i> Call Us
+              </a>
+            </div>
+          </div>
+
+          <!-- Tips card -->
+          <div class="glass-card" style="padding:24px;">
+            <div class="section-title">💡 Tips</div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <i class="fas fa-check-circle" style="color:var(--success);margin-top:2px;flex-shrink:0;"></i>
+                <span style="font-size:0.85rem;color:var(--text-secondary);">Rate honestly — your feedback helps improve teaching quality.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <i class="fas fa-check-circle" style="color:var(--success);margin-top:2px;flex-shrink:0;"></i>
+                <span style="font-size:0.85rem;color:var(--text-secondary);">You can save and come back — just log in again to edit.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <i class="fas fa-check-circle" style="color:var(--success);margin-top:2px;flex-shrink:0;"></i>
+                <span style="font-size:0.85rem;color:var(--text-secondary);">Use a modern browser like Chrome or Firefox for the best experience.</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <i class="fas fa-check-circle" style="color:var(--success);margin-top:2px;flex-shrink:0;"></i>
+                <span style="font-size:0.85rem;color:var(--text-secondary);">Fill the form on mobile too — the site is fully responsive.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/help.js"></script>
+</body>
+</html>
