@@ -157,24 +157,31 @@
       margin: 0 auto 20px;
     }
 
+    /* Sidebar mobile overlay */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 98;
+      top: 68px;
+    }
+    .sidebar-overlay.show {
+      display: block;
+    }
+
     /* Hamburger menu toggle */
     .sidebar-toggle {
       display: none;
       flex-direction: column;
       gap: 5px;
-      width: 36px;
-      height: 36px;
-      background: rgba(124,58,237,0.12);
-      border: 1px solid rgba(124,58,237,0.3);
-      border-radius: var(--radius-md);
+      width: 30px;
+      height: 24px;
+      background: none;
+      border: none;
       cursor: pointer;
-      padding: 6px;
+      padding: 0;
       margin-right: 16px;
-      transition: all 0.3s ease;
-    }
-    .sidebar-toggle:hover {
-      background: rgba(124,58,237,0.2);
-      border-color: rgba(124,58,237,0.5);
     }
     .sidebar-toggle span {
       width: 100%;
@@ -182,13 +189,6 @@
       background: var(--text-secondary);
       border-radius: 2px;
       transition: all 0.3s ease;
-    }
-    .sidebar-toggle.active {
-      background: rgba(124,58,237,0.25);
-      border-color: var(--primary);
-    }
-    .sidebar-toggle.active span {
-      background: var(--primary-light);
     }
     .sidebar-toggle.active span:nth-child(1) {
       transform: rotate(45deg) translateY(12px);
@@ -210,8 +210,13 @@
         width: 240px;
         height: calc(100vh - 68px);
         z-index: 99;
+        background: var(--bg-surface);
+        border-right: 1px solid var(--glass-border);
       }
-      .admin-sidebar.mobile-open { display: block; }
+      .admin-sidebar.mobile-open { 
+        display: block;
+        box-shadow: 4px 0 16px rgba(0, 0, 0, 0.5);
+      }
       .admin-section { padding: 20px 16px; }
       .profile-grid { grid-template-columns: 1fr; }
       .sidebar-toggle { display: flex; }
@@ -250,6 +255,7 @@
   </nav>
 
   <div class="page-wrapper">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="admin-layout">
       <!-- Sidebar -->
       <aside class="admin-sidebar">
