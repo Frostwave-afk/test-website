@@ -157,11 +157,51 @@
       margin: 0 auto 20px;
     }
 
+    /* Hamburger menu toggle */
+    .sidebar-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      width: 30px;
+      height: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-right: 16px;
+    }
+    .sidebar-toggle span {
+      width: 100%;
+      height: 2px;
+      background: var(--text-secondary);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .sidebar-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translateY(12px);
+    }
+    .sidebar-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .sidebar-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translateY(-11px);
+    }
+
     @media (max-width: 900px) {
       .admin-layout { grid-template-columns: 1fr; }
-      .admin-sidebar { display: none; }
+      .admin-sidebar { 
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 68px;
+        width: 240px;
+        height: calc(100vh - 68px);
+        z-index: 99;
+      }
+      .admin-sidebar.mobile-open { display: block; }
       .admin-section { padding: 20px 16px; }
       .profile-grid { grid-template-columns: 1fr; }
+      .sidebar-toggle { display: flex; }
     }
   </style>
 </head>
@@ -171,6 +211,11 @@
 
   <!-- Navbar -->
   <nav class="navbar">
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <a href="admin.html" class="navbar-brand">
       <div class="brand-icon">🛡️</div>
       Admin Panel

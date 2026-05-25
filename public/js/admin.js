@@ -15,6 +15,40 @@ window.addEventListener('DOMContentLoaded', async () => {
   setupPasswordChangeForm();
 });
 
+// ── Sidebar toggle for mobile ────────────────────────────────────────────────
+function toggleSidebar() {
+  const sidebar = document.querySelector('.admin-sidebar');
+  const toggle = document.getElementById('sidebarToggle');
+  if (sidebar) {
+    sidebar.classList.toggle('mobile-open');
+    toggle.classList.toggle('active');
+  }
+}
+
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', function(event) {
+  const sidebar = document.querySelector('.admin-sidebar');
+  const toggle = document.getElementById('sidebarToggle');
+  if (sidebar && sidebar.classList.contains('mobile-open')) {
+    if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+      sidebar.classList.remove('mobile-open');
+      toggle.classList.remove('active');
+    }
+  }
+});
+
+// Close sidebar when clicking a nav item on mobile
+document.addEventListener('click', function(event) {
+  if (event.target.closest('.sidebar-nav-item')) {
+    const sidebar = document.querySelector('.admin-sidebar');
+    const toggle = document.getElementById('sidebarToggle');
+    if (sidebar && window.innerWidth <= 900) {
+      sidebar.classList.remove('mobile-open');
+      toggle.classList.remove('active');
+    }
+  }
+});
+
 // ── Setup password change form ───────────────────────────────────────────────
 function setupPasswordChangeForm() {
   const form = document.getElementById('changePasswordForm');
