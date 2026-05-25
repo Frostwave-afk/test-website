@@ -2,10 +2,10 @@
 
 A full-stack web application for college students to rate their subjects, with an admin dashboard and analytics.
 
-**Live Deployment:**
-- 🌐 **Frontend**: https://test-website-eight-chi.vercel.app
-- ⚙️ **Backend**: https://test-website-production-1b48.up.railway.app
-- 🗄️ **Database**: MySQL on Railway
+**Deployment:**
+- 🌐 **Frontend**: Vercel (auto-deploys from GitHub)
+- ⚙️ **Backend**: Railway (auto-deploys from GitHub)  
+- 🗄️ **Database**: MySQL (cloud-hosted)
 
 ---
 
@@ -137,8 +137,9 @@ Form website/
 
 ### Default Admin Account
 - Username: `admin`
-- Password: `admin123`
-- ⚠️ Change via "My Profile" → "Change Password" after first login
+- Password: `admin123` (shown during `npm run setup`)
+- ⚠️ **Change immediately via "My Profile" → "Change Password" after first login**
+- ⚠️ **Never use default credentials in production**
 
 ---
 
@@ -147,7 +148,7 @@ Form website/
 ### Prerequisites
 - Node.js v18+
 - npm or yarn
-- MySQL 8+ (or use Railway's MySQL during development)
+- MySQL 8+ (local or cloud-hosted)
 
 ### 1. Clone & Install
 ```bash
@@ -155,26 +156,26 @@ cd backend
 npm install
 ```
 
-### 2. Configure `.env`
-Create `backend/.env` with Railway MySQL credentials:
+### 2. Configure `.env` (NOT included in repo)
+Create `backend/.env` with your database credentials:
 ```env
 PORT=8080
-DB_HOST=mysql.railway.internal
+DB_HOST=your-mysql-host
 DB_PORT=3306
-DB_USER=root
-DB_PASS=your_railway_password
-DB_NAME=railway
+DB_USER=your-db-user
+DB_PASS=your-secure-password
 
-JWT_SECRET=college-rating-system-secret-key-2026
+JWT_SECRET=your-long-random-secret-string
 JWT_EXPIRES_IN=7d
-FRONTEND_URL=https://test-website-eight-chi.vercel.app
+FRONTEND_URL=your-frontend-url
 ```
+⚠️ **`.env` is in `.gitignore` — never commit this file!**
 
 ### 3. Initialize Database
 ```bash
 npm run setup
 ```
-Creates tables and seeds default admin account.
+Creates tables and seeds default admin account (credentials will be shown in console).
 
 ### 4. Start Backend
 ```bash
@@ -186,7 +187,7 @@ npm start       # Production
 ```bash
 # In a new terminal
 cd public
-python -m http.server 3000  # Or use any local server
+python -m http.server 3000
 ```
 
 Visit: **http://localhost:3000**
@@ -198,7 +199,7 @@ Visit: **http://localhost:3000**
 ### Current Setup
 - **Frontend**: Deployed on Vercel (auto-deploys on git push)
 - **Backend**: Deployed on Railway (auto-deploys on git push)
-- **Database**: MySQL on Railway
+- **Database**: Cloud-hosted MySQL
 
 ### To Deploy Changes
 1. Make code changes locally
@@ -207,34 +208,38 @@ Visit: **http://localhost:3000**
 4. `git push`
 5. Vercel & Railway auto-deploy within 1-2 minutes
 
-### Environment Variables (Production)
+### Production Environment Variables
 
-**Railway Backend Variables:**
+**Set these in your hosting provider (NOT in code):**
 ```
-PORT=8080
-DB_HOST=mysql.railway.internal
-DB_PORT=3306
-DB_USER=root
-DB_PASS=<from Railway MySQL>
-DB_NAME=railway
+PORT=production-port
+DB_HOST=your-production-db-host
+DB_PORT=your-db-port
+DB_USER=your-production-user
+DB_PASS=your-production-password
+DB_NAME=your-db-name
 
-FRONTEND_URL=https://test-website-eight-chi.vercel.app
-JWT_SECRET=<long random string>
+FRONTEND_URL=https://your-frontend-domain
+JWT_SECRET=your-production-jwt-secret
 JWT_EXPIRES_IN=7d
 ```
 
+**Never hardcode secrets in code or README!**
+
 ---
 
-## 🛡️ Security Notes
+## 🛡️ Security Checklist
 
+- ✅ `.env` file in `.gitignore` (not committed)
 - ✅ Passwords hashed with bcryptjs (12 rounds)
-- ✅ JWT tokens with 7-day expiry
-- ✅ CORS enabled for Vercel frontend
+- ✅ JWT tokens with configurable expiry
+- ✅ CORS enabled for frontend only
 - ✅ Admin password changeable via profile
-- ✅ Admin login no longer shows default credentials
-- ⚠️ Change `JWT_SECRET` in production
-- ⚠️ Use HTTPS on all domains
-- ⚠️ Keep `.env` file secure (in `.gitignore`)
+- ⚠️ **Set unique `JWT_SECRET` per environment**
+- ⚠️ **Use strong `DB_PASS` in production**
+- ⚠️ **Use HTTPS on all domains**
+- ⚠️ **Rotate secrets regularly**
+- ⚠️ **Never commit `.env` files**
 
 ---
 
@@ -243,7 +248,7 @@ JWT_EXPIRES_IN=7d
 - ✅ Deployed to Vercel (frontend) & Railway (backend)
 - ✅ Added admin password change functionality
 - ✅ Removed password visibility toggle from admin login
-- ✅ Removed default credentials text from UI
+- ✅ Removed default credentials from UI
 - ✅ Database initialized with schema & default admin
 
 ---
