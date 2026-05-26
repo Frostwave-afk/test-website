@@ -258,4 +258,65 @@ router.post('/google', async (req, res) => {
   ── END UNCOMMENT BLOCK ─────────────────────────────────────────────────── */
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// POST /api/auth/debug-login — Debug login (DEVELOPMENT ONLY)
+// ─────────────────────────────────────────────────────────────────────────────
+router.post('/debug-login', async (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({ error: 'Debug endpoint not available in production.' });
+  }
+
+  try {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(400).json({ error: 'Email and password required.' });
+
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email.toLowerCase().trim()]);
+    
+    if (rows.length === 0) {
+      return res.json({ 
+        success: false,
+        message: 'User not found',
+        email: email.toLowerCase().trim()
+      });
+    }
+
+    const user = rows[0];
+    console.log('\n🔍 DEBUG LOGIN INFO:');
+    console.log('   Email:', user.email);
+    console.log('   Password in DB:', user.password_hash ? `${user.password_hash.substring(0, 20)}...` : 'NULL/EMPTY');
+    console.log('   Is bcrypt hash?', /^\$2[aby]\$/.test(user.password_hash || ''));
+    console.log('   Hash length:', (user.password_hash || '').length);
+
+    if (!user.password_hash) {
+      return res.json({
+        success: false,
+        message: 'No password set. User must use Google Sign-In.',
+        debug: { email: user.email, password_hash: null }
+      });
+    }
+
+    // Test bcrypt comparison
+    const match = await bcrypt.compare(password, user.password_hash);
+    console.log('   bcrypt.compare result:', match);
+    console.log('');
+
+    res.json({
+      success: match,
+      message: match ? 'Password matches!' : 'Password does NOT match',
+      debug: {
+        email: user.email,
+        passwordHashStartsWith: user.password_hash.substring(0, 10),
+        passwordHashLength: user.password_hash.length,
+        isBcryptHash: /^\$2[aby]\$/.test(user.password_hash),
+        compareResult: match,
+        plainTextInput: password
+      }
+    });
+  } catch (err) {
+    console.error('Debug login error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
