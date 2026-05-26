@@ -8,12 +8,39 @@ dotenv.config();
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
-app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+// ─── CORS Configuration ───
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'https://test-website-eight-chi.vercel.app',
+  process.env.FRONTEND_URL // Allow environment variable override
+];
+
+// Allow any *.vercel.app subdomain (for Vercel preview deployments)
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // For non-browser requests
+    
+    // Check if origin is in allowed list
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Check if origin ends with vercel.app
+    if (origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    
+    // Reject all other origins
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
