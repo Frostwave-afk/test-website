@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar({ isAdmin: isAdminLayout = false, onHamburgerClick, showHamburger = false }) {
@@ -13,7 +13,7 @@ export default function Navbar({ isAdmin: isAdminLayout = false, onHamburgerClic
     if (!user) return '?';
     if (user.role === 'admin') return (user.username || 'A').charAt(0).toUpperCase();
     const f = (user.firstName || user.first_name || '?').charAt(0);
-    const l = (user.lastName  || user.last_name  || '').charAt(0);
+    const l = (user.lastName || user.last_name || '').charAt(0);
     return (f + l).toUpperCase();
   })();
 
@@ -51,6 +51,22 @@ export default function Navbar({ isAdmin: isAdminLayout = false, onHamburgerClic
         <div className="brand-mark">{isAdmin ? '🛡️' : '🎓'}</div>
         {isAdmin ? 'Admin Panel' : 'College Ratings'}
       </Link>
+
+      {!showHamburger && (
+        <ul className="navbar-nav">
+          {isAdmin ? (
+            <>
+              <li><NavLink to="/admin" end>Dashboard</NavLink></li>
+              <li><NavLink to="/analytics">Analytics</NavLink></li>
+            </>
+          ) : (
+            <>
+              <li><NavLink to="/" end>Home</NavLink></li>
+              <li><NavLink to="/help">Help</NavLink></li>
+            </>
+          )}
+        </ul>
+      )}
 
       <div className="navbar-end">
         <div style={{ position: 'relative' }} ref={dropRef}>

@@ -34,11 +34,6 @@ const FORM_CARDS = [
   },
 ];
 
-const STUDENT_NAV = [
-  { id: 'home',    icon: 'fa-home',            label: 'Home',    path: '/' },
-  { id: 'help',    icon: 'fa-question-circle', label: 'Help',    path: '/help' },
-];
-
 export default function HomePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -93,6 +88,11 @@ export default function HomePage() {
     setSidebarOpen(false);
   }
 
+  function switchSection(path) {
+    closeSidebar();
+    navigate(path);
+  }
+
   return (
     <div className="page-wrapper">
       <Navbar onHamburgerClick={() => setSidebarOpen(v => !v)} showHamburger />
@@ -115,11 +115,15 @@ export default function HomePage() {
           </div>
 
           <nav className="sidebar-nav">
-            {STUDENT_NAV.map(item => (
+            {[
+              { id: 'home', icon: 'fa-home',            label: 'Home',       path: '/' },
+              { id: 'profile', icon: 'fa-user-cog', label: 'My Profile', path: '/profile' },
+              { id: 'help', icon: 'fa-question-circle', label: 'Help',       path: '/help' },
+            ].map(item => (
               <button
                 key={item.id}
                 className={`sidebar-nav-item ${item.id === 'home' ? 'active' : ''}`}
-                onClick={() => { closeSidebar(); navigate(item.path); }}
+                onClick={() => switchSection(item.path)}
                 id={`student-nav-${item.id}`}
               >
                 <span className="nav-icon"><i className={`fas ${item.icon}`} /></span>
@@ -131,7 +135,7 @@ export default function HomePage() {
 
             <button
               className="sidebar-nav-item"
-              onClick={() => { closeSidebar(); navigate('/form'); }}
+              onClick={() => switchSection('/form')}
               id="student-nav-form"
             >
               <span className="nav-icon"><i className={`fas ${submitted ? 'fa-edit' : 'fa-pen'}`} /></span>
@@ -141,7 +145,7 @@ export default function HomePage() {
             <div className="sidebar-divider" />
 
             <button
-              className="sidebar-nav-item sidebar-logout"
+              className="sidebar-nav-item danger"
               onClick={handleLogout}
               id="student-nav-logout"
             >
@@ -153,7 +157,7 @@ export default function HomePage() {
 
         {/* Main content */}
         <main className="admin-main">
-          <div className="container page-content">
+          <div style={{ padding: '32px', animation: 'fadeUp 0.3s ease' }}>
             {/* Hero */}
             <div style={{ paddingBottom: 36, borderBottom: '1px solid var(--border)', marginBottom: 36 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
@@ -229,7 +233,7 @@ export default function HomePage() {
 
             {/* Forms grid */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
-              <div className="section-heading" style={{ flex: 1 }}>Available Forms</div>
+              <div className="section-heading" style={{ flex: 1, marginBottom: 0 }}>Available Forms</div>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>Academic Year 2024–25</span>
             </div>
 

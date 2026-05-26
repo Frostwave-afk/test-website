@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage     from './pages/LoginPage';
 import HomePage      from './pages/HomePage';
 import FormPage      from './pages/FormPage';
+import StudentProfilePage from './pages/StudentProfilePage';
 import AdminPage     from './pages/AdminPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import HelpPage      from './pages/HelpPage';
@@ -23,6 +24,7 @@ export default function App() {
             {/* Student routes */}
             <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
             <Route path="/form" element={<ProtectedRoute><FormPage /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><StudentProfilePage /></ProtectedRoute>} />
             <Route path="/help" element={<ProtectedRoute><HelpPage /></ProtectedRoute>} />
 
             {/* Admin routes */}
