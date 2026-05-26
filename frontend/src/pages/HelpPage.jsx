@@ -57,11 +57,11 @@ export default function HelpPage() {
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 64, height: 64, borderRadius: 18, marginBottom: 16,
-            background: 'hsl(251,75%,12%)', border: '1px solid hsl(251,75%,22%)', fontSize: '2rem',
+            width: 'clamp(48px, 10vw, 64px)', height: 'clamp(48px, 10vw, 64px)', borderRadius: 18, marginBottom: 16,
+            background: 'hsl(251,75%,12%)', border: '1px solid hsl(251,75%,22%)', fontSize: 'clamp(1.5rem, 5vw, 2rem)',
           }}>💡</div>
-          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, marginBottom: 10 }}>Help & FAQ</h1>
-          <p style={{ color: 'var(--text-muted)', maxWidth: 480, margin: '0 auto' }}>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.4rem, 4vw, 2.2rem)', fontWeight: 800, marginBottom: 10 }}>Help & FAQ</h1>
+          <p style={{ color: 'var(--text-muted)', maxWidth: 480, margin: '0 auto', fontSize: 'clamp(0.85rem, 2vw, 1rem)' }}>
             Find answers to common questions about using the College Rating System.
           </p>
         </div>
@@ -71,10 +71,11 @@ export default function HelpPage() {
           {SECTIONS.map(s => (
             <a key={s.title} href={`#section-${s.title.replace(/\s/g, '-')}`}
               style={{
-                display: 'flex', alignItems: 'center', gap: 12, padding: '16px 20px',
+                display: 'flex', alignItems: 'center', gap: 12, 
+                padding: 'clamp(12px, 3vw, 20px)',
                 background: 'var(--bg-card)', border: '1px solid var(--border)',
                 borderRadius: 'var(--radius-lg)', color: 'var(--text-secondary)',
-                fontSize: '0.875rem', fontWeight: 500, textDecoration: 'none',
+                fontSize: 'clamp(0.75rem, 2vw, 0.875rem)', fontWeight: 500, textDecoration: 'none',
                 transition: 'var(--transition)',
               }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'hsl(251,75%,30%)'; e.currentTarget.style.color = 'var(--primary-light)'; }}
@@ -107,8 +108,8 @@ export default function HelpPage() {
                       onClick={() => toggle(key)}
                       style={{
                         width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        padding: '16px 20px', background: 'none', border: 'none', cursor: 'pointer',
-                        fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: '0.9rem',
+                        padding: 'clamp(12px, 3vw, 20px)', background: 'none', border: 'none', cursor: 'pointer',
+                        fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
                         color: isOpen ? 'var(--primary-light)' : 'var(--text-primary)',
                         textAlign: 'left', gap: 12, transition: 'color 0.2s',
                       }}
@@ -117,7 +118,7 @@ export default function HelpPage() {
                       <i className={`fas fa-chevron-${isOpen ? 'up' : 'down'}`} style={{ fontSize: '0.8rem', flexShrink: 0, color: isOpen ? 'var(--primary-light)' : 'var(--text-muted)', transition: 'transform 0.2s' }} />
                     </button>
                     {isOpen && (
-                      <div style={{ padding: '0 20px 18px', color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.7, borderTop: '1px solid var(--border)', paddingTop: 16, animation: 'fadeIn 0.2s ease' }}>
+                      <div style={{ padding: 'clamp(12px, 3vw, 20px)', color: 'var(--text-secondary)', fontSize: 'clamp(0.8rem, 2vw, 0.875rem)', lineHeight: 1.7, borderTop: '1px solid var(--border)', animation: 'fadeIn 0.2s ease' }}>
                         {item.a}
                       </div>
                     )}
@@ -131,14 +132,14 @@ export default function HelpPage() {
         {/* Contact card */}
         <div style={{
           background: 'var(--gradient-brand)', borderRadius: 'var(--radius-2xl)',
-          padding: '40px 32px', textAlign: 'center', marginTop: 20,
+          padding: 'clamp(24px, 6vw, 40px)', textAlign: 'center', marginTop: 20,
           boxShadow: '0 8px 32px hsl(251,75%,40%,0.25)',
         }}>
-          <div style={{ fontSize: '2rem', marginBottom: 12 }}>🎓</div>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 700, color: 'white', marginBottom: 8 }}>
+          <div style={{ fontSize: 'clamp(1.5rem, 5vw, 2rem)', marginBottom: 12 }}>🎓</div>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1rem, 3vw, 1.3rem)', fontWeight: 700, color: 'white', marginBottom: 8 }}>
             Still need help?
           </h3>
-          <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', marginBottom: 24 }}>
+          <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 'clamp(0.8rem, 2vw, 0.9rem)', marginBottom: 24 }}>
             Contact your college administrator for personalized assistance with your account or submissions.
           </p>
           <a href="mailto:admin@college.edu" className="btn" style={{ background: 'rgba(255,255,255,0.18)', color: 'white', border: '1px solid rgba(255,255,255,0.3)', backdropFilter: 'blur(8px)' }}>

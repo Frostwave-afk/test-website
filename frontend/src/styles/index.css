@@ -287,6 +287,15 @@ img { max-width: 100%; }
 
 .required { color: var(--danger); margin-left: 2px; }
 
+/* Form card — responsive */
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  padding: clamp(16px, 5vw, 40px);
+  box-shadow: var(--shadow-md);
+}
+
 /* Divider */
 .divider {
   display: flex;
@@ -1199,20 +1208,20 @@ img { max-width: 100%; }
   align-items: center;
   justify-content: center;
   gap: 0;
-  margin-bottom: 36px;
+  margin-bottom: clamp(20px, 5vw, 36px);
 }
 .step-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: clamp(4px, 2vw, 8px);
   position: relative;
   flex: 1;
 }
 .step-item:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: 19px;
+  top: clamp(15px, 2vw, 19px);
   left: 58%;
   width: 84%;
   height: 2px;
@@ -1222,7 +1231,8 @@ img { max-width: 100%; }
 }
 .step-item.completed:not(:last-child)::after { background: var(--primary); }
 .step-circle {
-  width: 38px; height: 38px;
+  width: clamp(32px, 8vw, 38px); 
+  height: clamp(32px, 8vw, 38px);
   border-radius: 50%;
   border: 2px solid var(--border);
   background: var(--bg-surface);
@@ -1230,7 +1240,7 @@ img { max-width: 100%; }
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
   color: var(--text-muted);
   z-index: 1;
   transition: var(--transition);
@@ -1247,7 +1257,7 @@ img { max-width: 100%; }
   background: var(--success);
   color: white;
 }
-.step-label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); text-align: center; }
+.step-label { font-size: clamp(0.6rem, 2vw, 0.72rem); font-weight: 600; color: var(--text-muted); text-align: center; }
 .step-item.active .step-label { color: var(--primary-light); }
 .step-item.completed .step-label { color: var(--success); }
 
@@ -1377,11 +1387,14 @@ img { max-width: 100%; }
 }
 
 /* ── Responsive ───────────────────────────────────── */
+/* ── Responsive: Tablet & Above ─────────────────── */
 @media (max-width: 1024px) {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .chart-grid { grid-template-columns: 1fr; }
   .chart-card.full { grid-column: 1; }
 }
+
+/* ── Responsive: Large Tablets & Below ──────────── */
 @media (max-width: 900px) {
   .admin-layout { grid-template-columns: 1fr; }
   .admin-sidebar {
@@ -1393,17 +1406,14 @@ img { max-width: 100%; }
     box-shadow: 4px 0 24px rgba(0,0,0,0.5);
     transform: translateX(-100%);
     transition: transform 0.32s var(--ease-out-expo);
-    /* Override sticky positioning on mobile */
     display: block !important;
   }
-  .admin-sidebar.open {
-    transform: translateX(0);
-  }
-}
-@media (max-width: 900px) {
+  .admin-sidebar.open { transform: translateX(0); }
   /* Hide top navbar links — sidebar handles navigation */
   .navbar-nav { display: none; }
 }
+
+/* ── Responsive: Tablet Portrait ────────────────── */
 @media (max-width: 768px) {
   .auth-container { grid-template-columns: 1fr; }
   .auth-left { display: none; }
@@ -1413,11 +1423,125 @@ img { max-width: 100%; }
   .navbar { padding: 0 16px; }
   .container { padding: 0 16px; }
   .page-content { padding: 24px 0 60px; }
+
+  /* Form improvements */
+  [style*="padding: '36px 40px'"] { padding: 24px 20px !important; }
 }
-@media (max-width: 480px) {
+
+/* ── Responsive: Mobile & Small Tablets ────────── */
+@media (max-width: 640px) {
+  /* Grid responsive */
   .grid-4 { grid-template-columns: 1fr; }
-  .rating-subject-name { min-width: 120px; font-size: 0.8rem; }
-  .rating-btn { width: 30px; height: 30px; font-size: 0.72rem; }
+  .grid-3 { grid-template-columns: 1fr; }
+  
+  /* Rating form improvements */
+  .rating-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+  }
+  
+  .rating-subject-name {
+    min-width: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+  
+  .rating-value-badge {
+    margin-left: 0;
+  }
+  
+  /* Make rating buttons scrollable horizontally on mobile */
+  .rating-btns {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    gap: 4px;
+    padding: 4px 0;
+    padding-bottom: 8px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+  
+  .rating-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+  
+  /* Checkbox & Radio improvements */
+  .radio-group, .checkbox-group {
+    gap: 6px;
+  }
+  
+  .radio-label, .checkbox-label {
+    padding: 7px 14px;
+    font-size: 0.8rem;
+  }
+  
   .step-label { display: none; }
   .toast-container { left: 16px; right: 16px; max-width: none; }
+  
+  /* Form card padding */
+  .container { padding: 0 12px; }
+  .page-content { padding: 16px 0 60px; }
+  
+  /* Help page spacing */
+  .section-heading {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+  
+  /* FAQ items more compact */
+  .card, [style*="background: 'var(--bg-card)'"] {
+    padding: 14px 16px !important;
+  }
+}
+
+/* ── Responsive: Small Phones ───────────────────── */
+@media (max-width: 480px) {
+  .grid-4 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  
+  /* Further reduce rating buttons */
+  .rating-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 0.65rem;
+  }
+  
+  .rating-subject-name { font-size: 0.75rem; }
+  
+  /* Reduce form padding further */
+  .container { padding: 0 10px !important; }
+  
+  /* Step indicator becomes more compact */
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+  
+  /* Button text smaller */
+  .btn { 
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+  
+  /* FAQ more compact */
+  [style*="padding: '16px 20px'"] { 
+    padding: 12px 14px !important; 
+  }
+  
+  /* Help page contact card */
+  [style*="padding: '40px 32px'"] {
+    padding: 24px 16px !important;
+  }
 }

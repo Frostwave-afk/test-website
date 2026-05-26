@@ -133,7 +133,7 @@ export default function FormPage() {
     return (
       <div className="page-wrapper">
         <Navbar />
-        <div className="container" style={{ maxWidth: 640, padding: '80px 24px', textAlign: 'center', animation: 'fadeUp 0.5s ease' }}>
+        <div className="container" style={{ maxWidth: 640, padding: 'clamp(40px, 8vw, 80px) clamp(12px, 5vw, 24px)', textAlign: 'center', animation: 'fadeUp 0.5s ease' }}>
           <div style={{
             width: 100, height: 100, borderRadius: '50%',
             background: 'hsl(152, 69%, 10%)', border: '2px solid hsl(152, 69%, 30%)',
@@ -206,11 +206,7 @@ export default function FormPage() {
         </div>
 
         {/* Form card */}
-        <div style={{
-          background: 'var(--bg-card)', border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-2xl)', padding: '36px 40px',
-          boxShadow: 'var(--shadow-md)',
-        }}>
+        <div className="form-card">
 
           {/* ── Step 1 ────────────────────────────────────────── */}
           {step === 1 && (
