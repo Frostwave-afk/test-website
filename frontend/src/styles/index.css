@@ -536,6 +536,59 @@ img { max-width: 100%; }
 
 .navbar-end { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 
+/* Hamburger button — shown on mobile in sidebar layouts */
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: var(--transition-fast);
+  padding: 0;
+}
+.hamburger-btn:hover {
+  background: hsl(220, 15%, 15%);
+  border-color: hsl(220, 15%, 26%);
+}
+.hamburger-bar {
+  display: block;
+  width: 16px;
+  height: 2px;
+  background: var(--text-secondary);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+.hamburger-btn:hover .hamburger-bar { background: var(--text-primary); }
+
+@media (max-width: 900px) {
+  .hamburger-btn { display: flex; }
+}
+
+/* Sidebar overlay for mobile */
+.sidebar-overlay {
+  display: none;
+}
+@media (max-width: 900px) {
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 199;
+    top: 64px;
+    animation: fadeIn 0.2s ease;
+  }
+}
+
 /* User Avatar */
 .user-avatar-btn {
   position: relative;
@@ -1265,6 +1318,13 @@ img { max-width: 100%; }
 }
 .sidebar-nav-item .nav-icon { width: 18px; text-align: center; color: inherit; }
 .sidebar-divider { height: 1px; background: var(--border); margin: 8px 8px; }
+.sidebar-logout {
+  color: hsl(355, 70%, 60%) !important;
+}
+.sidebar-logout:hover {
+  background: hsl(355, 80%, 10%) !important;
+  color: hsl(355, 80%, 70%) !important;
+}
 .admin-main { overflow: hidden; }
 
 /* ── Chart cards ──────────────────────────────────── */
@@ -1325,15 +1385,24 @@ img { max-width: 100%; }
 @media (max-width: 900px) {
   .admin-layout { grid-template-columns: 1fr; }
   .admin-sidebar {
-    display: none;
     position: fixed;
     left: 0; top: 64px;
     width: 240px;
     height: calc(100vh - 64px);
     z-index: 200;
     box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+    transform: translateX(-100%);
+    transition: transform 0.32s var(--ease-out-expo);
+    /* Override sticky positioning on mobile */
+    display: block !important;
   }
-  .admin-sidebar.open { display: block; }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+}
+@media (max-width: 900px) {
+  /* Hide top navbar links — sidebar handles navigation */
+  .navbar-nav { display: none; }
 }
 @media (max-width: 768px) {
   .auth-container { grid-template-columns: 1fr; }

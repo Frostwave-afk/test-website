@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export default function Navbar({ isAdmin: isAdminLayout = false }) {
+export default function Navbar({ isAdmin: isAdminLayout = false, onHamburgerClick, showHamburger = false }) {
   const { user, isAdmin, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -33,24 +33,24 @@ export default function Navbar({ isAdmin: isAdminLayout = false }) {
 
   return (
     <nav className="navbar">
+      {/* Hamburger — shown on mobile for both admin and student sidebar layouts */}
+      {showHamburger && (
+        <button
+          className="hamburger-btn"
+          onClick={onHamburgerClick}
+          aria-label="Toggle menu"
+          id="hamburgerBtn"
+        >
+          <span className="hamburger-bar" />
+          <span className="hamburger-bar" />
+          <span className="hamburger-bar" />
+        </button>
+      )}
+
       <Link to={isAdmin ? '/admin' : '/'} className="navbar-brand">
         <div className="brand-mark">{isAdmin ? '🛡️' : '🎓'}</div>
         {isAdmin ? 'Admin Panel' : 'College Ratings'}
       </Link>
-
-      <ul className="navbar-nav">
-        {isAdmin ? (
-          <>
-            <li><NavLink to="/admin" end>Dashboard</NavLink></li>
-            <li><NavLink to="/analytics">Analytics</NavLink></li>
-          </>
-        ) : (
-          <>
-            <li><NavLink to="/" end>Home</NavLink></li>
-            <li><NavLink to="/help">Help</NavLink></li>
-          </>
-        )}
-      </ul>
 
       <div className="navbar-end">
         <div style={{ position: 'relative' }} ref={dropRef}>

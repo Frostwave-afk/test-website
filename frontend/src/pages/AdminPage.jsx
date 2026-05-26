@@ -213,14 +213,11 @@ export default function AdminPage() {
 
   return (
     <div className="page-wrapper">
-      <Navbar isAdmin />
+      <Navbar isAdmin showHamburger onHamburgerClick={() => setSidebarOpen(v => !v)} />
 
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div onClick={() => setSidebarOpen(false)} style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-          zIndex: 198, top: 64,
-        }} />
+        <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />
       )}
 
       <div className="admin-layout">
@@ -255,12 +252,6 @@ export default function AdminPage() {
 
         {/* Main content */}
         <main className="admin-main">
-          {/* Hamburger for mobile */}
-          <div style={{ padding: '16px 20px 0', display: 'none' }} className="mobile-sidebar-toggle">
-            <button className="btn btn-ghost btn-sm" onClick={() => setSidebarOpen(v => !v)}>
-              <i className="fas fa-bars" /> Menu
-            </button>
-          </div>
 
           {/* ── Overview ─────────────────────────────────────── */}
           {section === 'overview' && (
