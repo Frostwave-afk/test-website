@@ -13,7 +13,7 @@ const SUBJECT_LABELS = {
 };
 
 export default function AdminPage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { showToast } = useToast();
 
   const [section, setSection]     = useState('overview');
@@ -247,6 +247,17 @@ export default function AdminPage() {
             <Link to="/analytics" className="sidebar-nav-item">
               <span className="nav-icon"><i className="fas fa-chart-bar" /></span> Analytics
             </Link>
+
+            <div className="sidebar-divider" />
+
+            <button
+              className="sidebar-nav-item danger"
+              onClick={logout}
+              id="admin-nav-logout"
+            >
+              <span className="nav-icon"><i className="fas fa-sign-out-alt" /></span>
+              Logout
+            </button>
           </nav>
         </aside>
 

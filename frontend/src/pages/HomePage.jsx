@@ -134,17 +134,6 @@ export default function HomePage() {
             <div className="sidebar-divider" />
 
             <button
-              className="sidebar-nav-item"
-              onClick={() => switchSection('/form')}
-              id="student-nav-form"
-            >
-              <span className="nav-icon"><i className={`fas ${submitted ? 'fa-edit' : 'fa-pen'}`} /></span>
-              {submitted ? 'Edit Form' : 'Fill Form'}
-            </button>
-
-            <div className="sidebar-divider" />
-
-            <button
               className="sidebar-nav-item danger"
               onClick={handleLogout}
               id="student-nav-logout"
@@ -160,18 +149,13 @@ export default function HomePage() {
           <div style={{ padding: '32px', animation: 'fadeUp 0.3s ease' }}>
             {/* Hero */}
             <div style={{ paddingBottom: 36, borderBottom: '1px solid var(--border)', marginBottom: 36 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800 }}>
-                    {greeting}, <span style={{ background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{firstName}</span>! 👋
-                  </div>
-                  <div style={{ color: 'var(--text-muted)', marginTop: 6, fontSize: '0.9rem' }}>
-                    Here are your available forms for this academic year.
-                  </div>
+              <div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800 }}>
+                  {greeting}, <span style={{ background: 'var(--gradient-brand)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{firstName}</span>! 👋
                 </div>
-                <button className="btn btn-primary" onClick={() => navigate('/form')} id="mainFormBtn">
-                  <i className={`fas ${submitted ? 'fa-edit' : 'fa-star'}`} /> {submitted ? 'Edit Form' : 'Rate Subjects'}
-                </button>
+                <div style={{ color: 'var(--text-muted)', marginTop: 6, fontSize: '0.9rem' }}>
+                  Here are your available forms for this academic year.
+                </div>
               </div>
             </div>
 
