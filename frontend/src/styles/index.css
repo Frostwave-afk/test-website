@@ -1366,6 +1366,7 @@ img { max-width: 100%; }
 .chart-card.full { grid-column: 1 / -1; }
 .chart-card-title { font-size: 0.95rem; font-weight: 700; }
 .chart-card-subtitle { color: var(--text-muted); font-size: 0.78rem; margin-top: 2px; }
+.rankings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
 /* ── Animations ───────────────────────────────────── */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -1456,6 +1457,11 @@ img { max-width: 100%; }
     grid-template-columns: 1fr;
     gap: 12px;
     overflow: hidden;
+  }
+  
+  /* Rankings two-column layout to single column on mobile */
+  .rankings-grid {
+    grid-template-columns: 1fr !important;
   }
   
   .chart-card {

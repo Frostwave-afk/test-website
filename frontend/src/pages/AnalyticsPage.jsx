@@ -264,7 +264,7 @@ export default function AnalyticsPage() {
             {/* 7. Rankings */}
             <div className="chart-card full">
               <ChartHeader title="🏆 Subject Rankings" subtitle="Subjects ranked by average rating (highest to lowest)" badge="Rankings" badgeIcon="fa-trophy" />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+              <div className="rankings-grid">
                 {[ranked.slice(0, 5), ranked.slice(5)].map((half, idx) => (
                   <ul key={idx} style={{ listStyle: 'none' }}>
                     {half.map((item, i) => {
