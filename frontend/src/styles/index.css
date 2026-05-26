@@ -1175,6 +1175,7 @@ img { max-width: 100%; }
   padding: 2px 8px;
   flex-shrink: 0;
   white-space: nowrap;
+  order: 3;
 }
 .rating-btns {
   display: flex;
@@ -1184,6 +1185,7 @@ img { max-width: 100%; }
   -webkit-overflow-scrolling: touch;
   flex: 1;
   align-items: center;
+  order: 2;
 }
 .rating-btn {
   width: 36px; height: 36px;
@@ -1443,6 +1445,12 @@ img { max-width: 100%; }
   .grid-4 { grid-template-columns: 1fr; }
   .grid-3 { grid-template-columns: 1fr; }
   
+  /* Analytics header mobile fix */
+  .container > div:first-child {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
   /* Analytics mobile improvements */
   .chart-grid {
     grid-template-columns: 1fr;
@@ -1452,6 +1460,11 @@ img { max-width: 100%; }
   .chart-card {
     padding: 16px;
     border-radius: var(--radius-lg);
+    min-height: 280px;
+  }
+  
+  .chart-card canvas {
+    max-height: 250px !important;
   }
   
   .chart-card-title {
@@ -1488,23 +1501,28 @@ img { max-width: 100%; }
   
   /* Rating form improvements */
   .rating-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
     padding: 12px 0;
+    flex-wrap: wrap;
   }
   
   .rating-subject-name {
     min-width: auto;
-    width: 100%;
+    flex: 1;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 8px;
     font-size: 0.8rem;
+    order: 2;
+    text-align: center;
   }
   
   .rating-value-badge {
     margin-left: 0;
+    order: 1;
   }
   
   /* Make rating buttons scrollable horizontally on mobile */
@@ -1519,6 +1537,7 @@ img { max-width: 100%; }
     padding-bottom: 8px;
     flex-wrap: nowrap;
     justify-content: flex-start;
+    order: 3;
   }
   
   .rating-btn {
