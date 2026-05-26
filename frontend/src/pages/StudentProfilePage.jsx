@@ -104,17 +104,6 @@ export default function StudentProfilePage() {
             <div className="sidebar-divider" />
 
             <button
-              className="sidebar-nav-item"
-              onClick={() => switchSection('/form')}
-              id="student-nav-form"
-            >
-              <span className="nav-icon"><i className={`fas ${formSubmitted ? 'fa-edit' : 'fa-pen'}`} /></span>
-              {formSubmitted ? 'Edit Form' : 'Fill Form'}
-            </button>
-
-            <div className="sidebar-divider" />
-
-            <button
               className="sidebar-nav-item danger"
               onClick={handleLogout}
               id="student-nav-logout"

@@ -565,7 +565,7 @@ function UserRow({ user: u, index, showGender, onEdit, onDelete, onView }) {
       </td>
       <td>
         <div style={{ display: 'flex', gap: 6 }}>
-          {u.form_submitted && (
+          {!!u.form_submitted && (
             <button className="btn btn-secondary btn-sm" onClick={onView} title="View form">
               <i className="fas fa-eye" />
             </button>
