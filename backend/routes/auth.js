@@ -144,6 +144,45 @@ router.get('/me', async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// PUT /api/auth/profile — Student updates their own name
+// ─────────────────────────────────────────────────────────────────────────────
+router.put('/profile', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) return res.status(401).json({ error: 'Not authenticated.' });
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decoded.role !== 'student') {
+      return res.status(403).json({ error: 'Only students can update their profile here.' });
+    }
+
+    const { firstName, lastName } = req.body;
+    if (!firstName || !lastName) {
+      return res.status(400).json({ error: 'First name and last name are required.' });
+    }
+    if (firstName.trim().length < 2 || lastName.trim().length < 2) {
+      return res.status(400).json({ error: 'Names must be at least 2 characters.' });
+    }
+
+    await pool.query(
+      'UPDATE users SET first_name = ?, last_name = ? WHERE id = ?',
+      [firstName.trim(), lastName.trim(), decoded.id]
+    );
+
+    const [rows] = await pool.query(
+      'SELECT id, first_name, last_name, email FROM users WHERE id = ?',
+      [decoded.id]
+    );
+
+    res.json({ message: 'Profile updated successfully.', user: rows[0] });
+  } catch (err) {
+    console.error('Profile update error:', err);
+    res.status(500).json({ error: 'Failed to update profile.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // POST /api/auth/change-password — Admin change password
 // ─────────────────────────────────────────────────────────────────────────────
 router.post('/change-password', async (req, res) => {

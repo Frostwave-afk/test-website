@@ -62,6 +62,8 @@ export const AuthAPI = {
   googleAuth: (token) =>
     apiFetch('/auth/google', { method: 'POST', body: JSON.stringify({ token }) }),
   getMe:      () => apiFetch('/auth/me'),
+  updateProfile: (firstName, lastName) =>
+    apiFetch('/auth/profile', { method: 'PUT', body: JSON.stringify({ firstName, lastName }) }),
 
   // Unified smart login: tries student first, then admin
   smartLogin: async (email, password) => {
