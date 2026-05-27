@@ -103,6 +103,54 @@ export default function LoginPage() {
     } finally { setAdminLoading(false); }
   }
 
+  // ── Google Sign-In submit ─────────────────────────────────────────────────
+  function handleGoogleSignIn() {
+    if (typeof window.google === 'undefined') {
+      showToast('Google Sign-In is loading. Please try again in a moment.', 'info', 3000);
+      return;
+    }
+
+    const GOOGLE_CLIENT_ID = '23934249893-9e3jgojnck8mv96p89murarribvtv850.apps.googleusercontent.com';
+    const btn = document.getElementById('googleSignInBtn');
+    if (btn) {
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+    }
+
+    window.google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: async (response) => {
+        try {
+          const data = await AuthAPI.googleAuth(response.credential);
+          login(data.token, { ...data.user, role: 'student' });
+          showToast('Signed in with Google! Redirecting...', 'success');
+          setTimeout(() => navigate('/'), 600);
+        } catch (err) {
+          showToast(err.message || 'Google Sign-In failed. Please try again.', 'error');
+          if (btn) {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+          }
+        }
+      },
+      auto_select: false,
+      cancel_on_tap_outside: true
+    });
+
+    window.google.accounts.id.prompt((notification) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        window.google.accounts.id.renderButton(
+          document.getElementById('googleSignInBtn'),
+          { theme: 'outline', size: 'large', width: '100%' }
+        );
+        if (btn) {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+      }
+    });
+  }
+
   return (
     <div className="auth-page">
       <div className="auth-container">
@@ -156,10 +204,9 @@ export default function LoginPage() {
                 <h2 className="auth-panel-title">Welcome back! 👋</h2>
                 <p className="auth-panel-subtitle">Sign in to your student account</p>
 
-                <button className="google-btn" type="button" onClick={() => showToast('Google Sign-In is coming soon! Please use email & password.', 'info', 4000)} id="googleSignInBtn">
+                <button className="google-btn" type="button" onClick={handleGoogleSignIn} id="googleSignInBtn">
                   <img className="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
                   Continue with Google
-                  <span className="coming-soon-pill">Soon</span>
                 </button>
 
                 <div className="divider">or sign in with email</div>
