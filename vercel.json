@@ -5,7 +5,7 @@
   "env": {
     "VITE_API_BASE": "@api_base_url"
   },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "src": "^/(?!api).*", "dest": "/index.html", "status": 200 }
   ]
 }
