@@ -7,8 +7,7 @@
   <meta name="description" content="Sign in to the College Subject Rating System to rate your subjects and provide feedback.">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <!-- TODO (Google Auth): Uncomment below after setting up Google OAuth (see GOOGLE_AUTH_SETUP.md) -->
-  <!-- <script src="https://accounts.google.com/gsi/client" async defer></script> -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     .auth-page {
       min-height: 100vh;
@@ -303,7 +302,6 @@
             <button class="btn-google" id="googleSignInBtn" onclick="handleGoogleSignIn()" type="button">
               <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
               Continue with Google
-              <span class="google-coming-soon">Coming Soon</span>
             </button>
 
             <div class="divider">or sign in with email</div>

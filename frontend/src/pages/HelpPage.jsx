@@ -6,9 +6,9 @@ const SECTIONS = [
     title: 'Getting Started',
     icon: 'fa-rocket',
     items: [
-      { q: 'How do I create an account?', a: 'Click "Create account" on the login page. Enter your first name, last name, college email, and a password. You will be redirected to the dashboard immediately after registration.' },
-      { q: 'I forgot my password. What do I do?', a: 'Contact your college administrator to reset your password. Automated password reset via email is not yet available.' },
-      { q: 'Can I log in with Google?', a: 'Google Sign-In is coming soon! For now, please use your email and password to sign in.' },
+      { q: 'How do I create an account?', a: 'Click "Create account" on the login page. Enter your first name, last name, college email, and a password. You will be redirected to the dashboard immediately after registration. You can also use Google Sign-In to create or access your account quickly.' },
+      { q: 'I forgot my password. What do I do?', a: 'Contact your college administrator to reset your password. Admins can reset student passwords through the admin panel. Alternatively, you can use Google Sign-In to access your account.' },
+      { q: 'Can I log in with Google?', a: 'Yes! Click "Continue with Google" on the login page to sign in with your Google account. Your account will be created automatically on your first sign-in, or linked to your existing email account if you already have one.' },
     ]
   },
   {
@@ -27,7 +27,8 @@ const SECTIONS = [
     items: [
       { q: 'Is my feedback anonymous?', a: 'Your feedback is submitted under your account but is only viewable by college administrators. Individual ratings are not publicly displayed.' },
       { q: 'Who can see my form responses?', a: 'Only college administrators with admin portal access can view individual form submissions. Your ratings are confidential.' },
-      { q: 'Is my data secure?', a: 'Yes. All data is transmitted over HTTPS and stored securely. Passwords are hashed and never stored in plain text.' },
+      { q: 'Is my data secure?', a: 'Yes. All data is transmitted over HTTPS and stored securely. Passwords are hashed and never stored in plain text. Google Sign-In adds an extra layer of security with no stored passwords.' },
+      { q: 'How do I change my password? (Admin)', a: 'Admin users can change their password through the Admin Settings page. Click on your profile menu, select "Settings", then choose "Change Password". Enter your current password and set a new secure password.' },
     ]
   },
   {

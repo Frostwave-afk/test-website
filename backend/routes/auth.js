@@ -210,15 +210,10 @@ router.post('/change-password', async (req, res) => {
 //   4. Uncomment the implementation block below
 // ═══════════════════════════════════════════════════════════════════════════════
 router.post('/google', async (req, res) => {
-  return res.status(501).json({
-    error: 'Google Sign-In not yet configured.',
-    message: 'See GOOGLE_AUTH_SETUP.md for step-by-step setup instructions.',
-    setupFile: 'GOOGLE_AUTH_SETUP.md'
-  });
-
-  /* ── UNCOMMENT BELOW AFTER GOOGLE_CLIENT_ID IS SET ──────────────────────
   try {
     const { token } = req.body;
+    if (!token) return res.status(400).json({ error: 'Google token is required.' });
+
     const { OAuth2Client } = require('google-auth-library');
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -226,7 +221,8 @@ router.post('/google', async (req, res) => {
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID
     });
-    const { sub: googleId, email, given_name: firstName, family_name: lastName } = ticket.getPayload();
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, given_name: firstName, family_name: lastName } = payload;
 
     let [users] = await pool.query(
       'SELECT * FROM users WHERE google_id = ? OR email = ?', [googleId, email]
@@ -234,13 +230,15 @@ router.post('/google', async (req, res) => {
 
     let user;
     if (users.length === 0) {
+      // New user — create account automatically
       const [result] = await pool.query(
         'INSERT INTO users (first_name, last_name, email, google_id) VALUES (?, ?, ?, ?)',
-        [firstName, lastName, email, googleId]
+        [firstName || 'User', lastName || '', email, googleId]
       );
-      user = { id: result.insertId, first_name: firstName, last_name: lastName, email };
+      user = { id: result.insertId, first_name: firstName || 'User', last_name: lastName || '', email };
     } else {
       user = users[0];
+      // Link google_id to existing email/password account if not already linked
       if (!user.google_id) {
         await pool.query('UPDATE users SET google_id = ? WHERE id = ?', [googleId, user.id]);
       }
@@ -253,9 +251,8 @@ router.post('/google', async (req, res) => {
     });
   } catch (err) {
     console.error('Google auth error:', err);
-    res.status(401).json({ error: 'Google authentication failed.' });
+    res.status(401).json({ error: 'Google authentication failed. Please try again.' });
   }
-  ── END UNCOMMENT BLOCK ─────────────────────────────────────────────────── */
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -45,16 +45,49 @@ function togglePassword(inputId, btn) {
   }
 }
 
-// ── Google Sign-In placeholder ────────────────────────────────────────────────
-// ═══════════════════════════════════════════════════════════════════════════════
-// TODO: GOOGLE AUTH — See GOOGLE_AUTH_SETUP.md for full setup instructions
-// When ready:
-//   1. Uncomment the Google GSI script in login.html
-//   2. Set GOOGLE_CLIENT_ID in backend/.env
-//   3. Replace handleGoogleSignIn() below with the real implementation
-// ═══════════════════════════════════════════════════════════════════════════════
+// ── Google Sign-In ────────────────────────────────────────────────────────────
+const GOOGLE_CLIENT_ID = '23934249893-9e3jgojnck8mv96p89murarribvtv850.apps.googleusercontent.com';
+
 function handleGoogleSignIn() {
-  showToast('Google Sign-In is coming soon! Please use email & password for now.', 'info', 4000);
+  if (typeof google === 'undefined') {
+    showToast('Google Sign-In is loading, please try again in a moment.', 'info', 3000);
+    return;
+  }
+
+  const btn = document.getElementById('googleSignInBtn');
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: async (response) => {
+      try {
+        const data = await AuthAPI.googleAuth(response.credential);
+        Auth.setToken(data.token);
+        Auth.setUser({ ...data.user, role: 'student' });
+        showToast('Signed in with Google! Redirecting...', 'success');
+        setTimeout(() => window.location.href = '/index.html', 800);
+      } catch (err) {
+        showToast(err.message || 'Google Sign-In failed. Please try again.', 'error');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    },
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+
+  google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      // One Tap was blocked — fall back to popup
+      google.accounts.id.renderButton(
+        document.getElementById('googleSignInBtn'),
+        { theme: 'outline', size: 'large', width: '100%' }
+      );
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  });
 }
 
 // ── Error helpers ─────────────────────────────────────────────────────────────
