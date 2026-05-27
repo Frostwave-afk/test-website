@@ -1111,6 +1111,16 @@ img { max-width: 100%; }
   letter-spacing: 0.05em;
 }
 
+.google-btn-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.google-btn-container > div {
+  width: 100% !important;
+}
+
 .password-wrap { position: relative; }
 .password-wrap .form-control { padding-right: 46px; }
 .password-toggle {

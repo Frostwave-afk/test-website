@@ -37,7 +37,7 @@ router.post('/register', async (req, res) => {
     const token = signToken({ id: result.insertId, email, role: 'student' });
     res.status(201).json({
       token,
-      user: { id: result.insertId, firstName: firstName.trim(), lastName: lastName.trim(), email }
+      user: { id: result.insertId, firstName: firstName.trim(), lastName: lastName.trim(), email, hasPassword: true }
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -69,7 +69,7 @@ router.post('/login', async (req, res) => {
     const token = signToken({ id: user.id, email: user.email, role: 'student' });
     res.json({
       token,
-      user: { id: user.id, firstName: user.first_name, lastName: user.last_name, email: user.email }
+      user: { id: user.id, firstName: user.first_name, lastName: user.last_name, email: user.email, hasPassword: true }
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -198,6 +198,124 @@ router.post('/change-password', async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// POST /api/auth/change-password-student — Student change their own password
+// ─────────────────────────────────────────────────────────────────────────────
+router.post('/change-password-student', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) return res.status(401).json({ error: 'Not authenticated.' });
+    
+    const token = authHeader.split(' ')[1];
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ error: 'Invalid or expired token.' });
+    }
+
+    // Only students can use this endpoint
+    if (decoded.role !== 'student') 
+      return res.status(403).json({ error: 'Only students can use this endpoint.' });
+
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword)
+      return res.status(400).json({ error: 'Current and new passwords are required.' });
+
+    if (newPassword.length < 6)
+      return res.status(400).json({ error: 'New password must be at least 6 characters.' });
+
+    if (currentPassword === newPassword)
+      return res.status(400).json({ error: 'New password must be different from current password.' });
+
+    // Get student from database
+    const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [decoded.id]);
+    if (rows.length === 0)
+      return res.status(404).json({ error: 'Student not found.' });
+
+    const student = rows[0];
+
+    // Check if student has a password (not Google auth only)
+    if (!student.password_hash)
+      return res.status(400).json({ error: 'Password changes are not available for Google Sign-In accounts. Please use Google to authenticate.' });
+
+    // Verify current password
+    const valid = await bcrypt.compare(currentPassword, student.password_hash);
+    if (!valid)
+      return res.status(401).json({ error: 'Current password is incorrect.' });
+
+    // Hash new password
+    const newHash = await bcrypt.hash(newPassword, 12);
+
+    // Update password
+    await pool.query('UPDATE users SET password_hash = ? WHERE id = ?', [newHash, decoded.id]);
+
+    res.json({ message: 'Password changed successfully.' });
+  } catch (err) {
+    console.error('Change password error:', err);
+    res.status(500).json({ error: 'Failed to change password.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// POST /api/auth/change-password-student — Student change their own password
+// ─────────────────────────────────────────────────────────────────────────────
+router.post('/change-password-student', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    if (!authHeader) return res.status(401).json({ error: 'Not authenticated.' });
+    
+    const token = authHeader.split(' ')[1];
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({ error: 'Invalid or expired token.' });
+    }
+
+    // Only students can use this endpoint
+    if (decoded.role !== 'student') 
+      return res.status(403).json({ error: 'Only students can use this endpoint.' });
+
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword)
+      return res.status(400).json({ error: 'Current and new passwords are required.' });
+
+    if (newPassword.length < 6)
+      return res.status(400).json({ error: 'New password must be at least 6 characters.' });
+
+    if (currentPassword === newPassword)
+      return res.status(400).json({ error: 'New password must be different from current password.' });
+
+    // Get student from database
+    const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [decoded.id]);
+    if (rows.length === 0)
+      return res.status(404).json({ error: 'Student not found.' });
+
+    const student = rows[0];
+
+    // Check if student has a password (not Google auth only)
+    if (!student.password_hash)
+      return res.status(400).json({ error: 'Password changes are not available for Google Sign-In accounts. Please use Google to authenticate.' });
+
+    // Verify current password
+    const valid = await bcrypt.compare(currentPassword, student.password_hash);
+    if (!valid)
+      return res.status(401).json({ error: 'Current password is incorrect.' });
+
+    // Hash new password
+    const newHash = await bcrypt.hash(newPassword, 12);
+
+    // Update password
+    await pool.query('UPDATE users SET password_hash = ? WHERE id = ?', [newHash, decoded.id]);
+
+    res.json({ message: 'Password changed successfully.' });
+  } catch (err) {
+    console.error('Change password error:', err);
+    res.status(500).json({ error: 'Failed to change password.' });
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // POST /api/auth/google — Google OAuth (Stub — configure later)
 // ─────────────────────────────────────────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -235,7 +353,7 @@ router.post('/google', async (req, res) => {
         'INSERT INTO users (first_name, last_name, email, google_id) VALUES (?, ?, ?, ?)',
         [firstName || 'User', lastName || '', email, googleId]
       );
-      user = { id: result.insertId, first_name: firstName || 'User', last_name: lastName || '', email };
+      user = { id: result.insertId, first_name: firstName || 'User', last_name: lastName || '', email, password_hash: null };
     } else {
       user = users[0];
       // Link google_id to existing email/password account if not already linked
@@ -247,7 +365,7 @@ router.post('/google', async (req, res) => {
     const jwtToken = signToken({ id: user.id, email: user.email, role: 'student' });
     res.json({
       token: jwtToken,
-      user: { id: user.id, firstName: user.first_name, lastName: user.last_name, email: user.email }
+      user: { id: user.id, firstName: user.first_name, lastName: user.last_name, email: user.email, hasPassword: !!user.password_hash }
     });
   } catch (err) {
     console.error('Google auth error:', err);

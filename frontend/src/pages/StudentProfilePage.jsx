@@ -50,7 +50,7 @@ export default function StudentProfilePage() {
     setPwdErrors({});
     setPwdLoading(true);
     try {
-      await apiFetch('/auth/change-password', { 
+      await apiFetch('/auth/change-password-student', { 
         method: 'POST', 
         body: JSON.stringify({ currentPassword: pwdForm.current, newPassword: pwdForm.new }) 
       });
@@ -147,6 +147,7 @@ export default function StudentProfilePage() {
                 ))}
               </div>
               
+              {user?.hasPassword ? (
               <div style={{ borderTop: '1px solid var(--border)', paddingTop: 28 }}>
                 <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 20 }}>Change Password</h3>
                 <form onSubmit={handlePwdChange} noValidate id="changePasswordForm">
@@ -167,6 +168,12 @@ export default function StudentProfilePage() {
                   </button>
                 </form>
               </div>
+              ) : (
+              <div style={{ borderTop: '1px solid var(--border)', paddingTop: 28, textAlign: 'center', color: 'var(--text-muted)' }}>
+                <i className="fas fa-lock" style={{ fontSize: '2rem', marginBottom: 12, display: 'block', opacity: 0.6 }} />
+                <p style={{ fontSize: '0.9rem' }}>You're using Google Sign-In — no password needed.</p>
+              </div>
+              )}
             </div>
           </div>
         </main>
