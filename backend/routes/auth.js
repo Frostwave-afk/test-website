@@ -82,18 +82,19 @@ router.post('/login', async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 router.post('/admin-login', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    if (!username || !password)
-      return res.status(400).json({ error: 'Username and password are required.' });
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(400).json({ error: 'Email and password are required.' });
 
-    const [rows] = await pool.query('SELECT * FROM admin_data WHERE username = ?', [username.trim()]);
+    // Look up admin by email
+    const [rows] = await pool.query('SELECT * FROM admin_data WHERE email = ?', [email.toLowerCase().trim()]);
     if (rows.length === 0)
-      return res.status(401).json({ error: 'Invalid admin credentials.' });
+      return res.status(401).json({ error: 'Invalid credentials.' });
 
     const admin = rows[0];
     const valid = await bcrypt.compare(password, admin.password_hash);
     if (!valid)
-      return res.status(401).json({ error: 'Invalid admin credentials.' });
+      return res.status(401).json({ error: 'Invalid credentials.' });
 
     const token = signToken({ id: admin.id, username: admin.username, role: 'admin', adminRole: admin.role });
     res.json({

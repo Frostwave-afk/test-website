@@ -57,11 +57,31 @@ export const AuthAPI = {
     apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   register:   (firstName, lastName, email, password) =>
     apiFetch('/auth/register', { method: 'POST', body: JSON.stringify({ firstName, lastName, email, password }) }),
-  adminLogin: (username, password) =>
-    apiFetch('/auth/admin-login', { method: 'POST', body: JSON.stringify({ username, password }) }),
+  adminLogin: (email, password) =>
+    apiFetch('/auth/admin-login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   googleAuth: (token) =>
     apiFetch('/auth/google', { method: 'POST', body: JSON.stringify({ token }) }),
   getMe:      () => apiFetch('/auth/me'),
+
+  // Unified smart login: tries student first, then admin
+  smartLogin: async (email, password) => {
+    // Try student login first
+    try {
+      const data = await apiFetch('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) });
+      return { ...data, detectedRole: 'student' };
+    } catch (studentErr) {
+      // If student login says "uses Google Sign-In", don't try admin
+      if (studentErr.message && studentErr.message.toLowerCase().includes('google')) throw studentErr;
+      // Otherwise try admin login
+      try {
+        const data = await apiFetch('/auth/admin-login', { method: 'POST', body: JSON.stringify({ email, password }) });
+        return { ...data, detectedRole: 'admin' };
+      } catch {
+        // Re-throw student error as the primary message
+        throw studentErr;
+      }
+    }
+  },
 };
 
 // ── Forms API ─────────────────────────────────────────────────────────────────
