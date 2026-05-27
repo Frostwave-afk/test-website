@@ -1115,9 +1115,15 @@ img { max-width: 100%; }
   width: 100%;
   display: flex;
   justify-content: center;
+  min-width: 280px;
 }
 
 .google-btn-container > div {
+  width: 100% !important;
+  max-width: 400px !important;
+}
+
+.google-btn-container button {
   width: 100% !important;
 }
 

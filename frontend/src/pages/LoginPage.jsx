@@ -112,7 +112,6 @@ export default function LoginPage() {
         window.google.accounts.id.renderButton(container, {
           theme: 'outline',
           size: 'large',
-          width: '100%',
           text: 'continue_with'
         });
       }
@@ -165,7 +164,6 @@ export default function LoginPage() {
         window.google.accounts.id.renderButton(container, {
           theme: 'outline',
           size: 'large',
-          width: '100%',
           text: 'continue_with'
         });
       }
